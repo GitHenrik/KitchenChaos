@@ -9,10 +9,15 @@ public class BaseCounter : MonoBehaviour, IKitchenObjectParent
 
   private KitchenObject kitchenObject;
 
-  // overridden in extending classes
+  // overridden in extending classes. Should never be fired from base class.
   public virtual void Interact(Player player)
   {
     Debug.LogError("BaseCounter.Interact();");
+  }
+
+  public virtual void InteractAlternate(Player player)
+  {
+    Debug.LogError("BaseCounter.InteractAlternate();");
   }
 
   public Transform GetKitchenObjectFollowTransform()

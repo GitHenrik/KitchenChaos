@@ -36,8 +36,18 @@ public class Player : MonoBehaviour, IKitchenObjectParent
 
   private void Start()
   {
-    // subscribe to interaction event
+    // Player sets values for event handlers that were instantiated on GameInput.Awake()
+    // describe methods for fired actions
     gameInput.OnInteractAction += GameInput_OnInteractAction;
+    gameInput.OnInteractAlternateAction += GameInput_OnInteractAlternateAction;
+  }
+
+  private void GameInput_OnInteractAlternateAction(object sender, EventArgs e)
+  {
+    if (selectedCounter != null)
+    {
+      selectedCounter.InteractAlternate(this);
+    }
   }
 
   private void GameInput_OnInteractAction(object sender, System.EventArgs e)
@@ -115,12 +125,14 @@ public class Player : MonoBehaviour, IKitchenObjectParent
       // cannot move towards this direction
       // Attempt only X
       Vector3 moveDirX = new Vector3(moveDir.x, 0, 0).normalized;
-      canMove = !Physics.CapsuleCast(
-      transform.position,
-      transform.position + Vector3.up * playerHeight,
-      playerRadius,
-      moveDirX,
-      moveDistance);
+      // if moving diagonally, and there is nothing along X-axis to block it, player can move
+      canMove = moveDir.x != 0 && !Physics.CapsuleCast(
+        transform.position,
+        transform.position + Vector3.up * playerHeight,
+        playerRadius,
+        moveDirX,
+        moveDistance
+      );
       if (canMove)
       {
         // can move only on X
@@ -130,12 +142,15 @@ public class Player : MonoBehaviour, IKitchenObjectParent
       {
         // cannot move X, attempt Z
         Vector3 moveDirZ = new Vector3(0, 0, moveDir.z).normalized;
-        canMove = !Physics.CapsuleCast(
-        transform.position,
-        transform.position + Vector3.up * playerHeight,
-        playerRadius,
-        moveDirZ,
-        moveDistance);
+        // if moving diagonally, and there is nothing along Z-axis to block it, player can move
+
+        canMove = moveDir.z != 0 && !Physics.CapsuleCast(
+          transform.position,
+          transform.position + Vector3.up * playerHeight,
+          playerRadius,
+          moveDirZ,
+          moveDistance
+        );
         if (canMove)
         {
           // can move only on X
