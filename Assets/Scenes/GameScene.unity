@@ -152,7 +152,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 049fe9aa9a473df48bb42fc7e2c23ce8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  moveSpeed: 5
+  moveSpeed: 6
   gameInput: {fileID: 265342519}
   countersLayerMask:
     serializedVersion: 2
