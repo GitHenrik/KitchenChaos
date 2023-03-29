@@ -51,6 +51,15 @@ public class CuttingCounter : BaseCounter, IHasProgress
       if (player.HasKitchenObject())
       {
         // player has something
+        if (player.GetKitchenObject().TryGetPlate(out PlateKitchenObject plateKitchenObject))
+        {
+          // player is holding a plate, try adding an ingredient
+          if (plateKitchenObject.TryAddIngredient(GetKitchenObject().GetKitchenObjectSO()))
+          {
+            // ingredient successfully added: destroy object on this counter
+            GetKitchenObject().DestroySelf();
+          }
+        }
       }
       else
       {
