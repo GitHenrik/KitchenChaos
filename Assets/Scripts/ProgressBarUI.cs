@@ -6,19 +6,27 @@ using UnityEngine.UI;
 
 public class ProgressBarUI : MonoBehaviour
 {
-  [SerializeField] private CuttingCounter cuttingCounter;
+  [SerializeField] private GameObject hasProgressGameObject;
   [SerializeField] private Image barImage;
+
+  private IHasProgress hasProgress;
 
   private void Start()
   {
+    // Note: Unity has no way of knowing that a gameObject implements a certain interface
+    hasProgress = hasProgressGameObject.GetComponent<IHasProgress>();
+    if (hasProgress == null)
+    {
+      Debug.LogError("Game Object " + hasProgressGameObject + " does not implement interface IProgress");
+    }
     // listen to the event
-    cuttingCounter.OnProgressChanged += CuttingCounter_OnProgressChanged;
+    hasProgress.OnProgressChanged += HasProgress_OnProgressChanged;
     barImage.fillAmount = 0f;
     // Disable object AFTER the event handler starts listening.
     Hide();
   }
 
-  private void CuttingCounter_OnProgressChanged(object sender, CuttingCounter.OnProgressChangedEventArgs e)
+  private void HasProgress_OnProgressChanged(object sender, IHasProgress.OnProgressChangedEventArgs e)
   {
     barImage.fillAmount = e.progressNormalized;
 
