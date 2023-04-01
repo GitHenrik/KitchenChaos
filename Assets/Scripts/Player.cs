@@ -9,6 +9,7 @@ public class Player : MonoBehaviour, IKitchenObjectParent
   // PascalCase: not a field, but a property
   public static Player Instance { get; private set; }
 
+  public event EventHandler OnPickedSomething;
   public event EventHandler<OnSelectedCounterChangedEventArgs> OnSelectedCounterChanged;
   public class OnSelectedCounterChangedEventArgs : EventArgs
   {
@@ -190,6 +191,10 @@ public class Player : MonoBehaviour, IKitchenObjectParent
   {
     // Play possible item grab animation here
     this.kitchenObject = kitchenObject;
+    if (kitchenObject != null)
+    {
+      OnPickedSomething?.Invoke(this, EventArgs.Empty);
+    }
   }
 
   public KitchenObject GetKitchenObject()
