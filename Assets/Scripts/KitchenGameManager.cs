@@ -6,6 +6,8 @@ using UnityEngine;
 public class KitchenGameManager : MonoBehaviour
 {
   public event EventHandler OnStateChanged;
+  public event EventHandler OnGamePaused;
+  public event EventHandler OnGameUnpaused;
 
   public static KitchenGameManager Instance { get; private set; }
   private enum State
@@ -22,12 +24,38 @@ public class KitchenGameManager : MonoBehaviour
   private float gamePlayingTimer;
   private float gamePlayingTimerMax = 12f;
 
-
+  private bool isGamePaused = false;
 
   private void Awake()
   {
     Instance = this;
     state = State.WaitingToStart;
+  }
+
+  private void Start()
+  {
+    GameInput.Instance.OnPauseAction += GameInput_OnPauseAction;
+  }
+
+  private void GameInput_OnPauseAction(object sender, EventArgs e)
+  {
+    TogglePauseGame();
+  }
+
+  public void TogglePauseGame()
+  {
+    // everything is Time.deltaTime -related: scale to 0
+    isGamePaused = !isGamePaused;
+    if (isGamePaused)
+    {
+      Time.timeScale = 0f;
+      OnGamePaused?.Invoke(this, EventArgs.Empty);
+    }
+    else
+    {
+      Time.timeScale = 1f;
+      OnGameUnpaused?.Invoke(this, EventArgs.Empty);
+    }
   }
 
   private void Update()
