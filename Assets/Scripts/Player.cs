@@ -133,7 +133,7 @@ public class Player : MonoBehaviour, IKitchenObjectParent
       // Attempt only X
       Vector3 moveDirX = new Vector3(moveDir.x, 0, 0).normalized;
       // if moving diagonally, and there is nothing along X-axis to block it, player can move
-      canMove = moveDir.x != 0 && !Physics.CapsuleCast(
+      canMove = (moveDir.x < -.5f || moveDir.x > +.5f) && !Physics.CapsuleCast(
         transform.position,
         transform.position + Vector3.up * playerHeight,
         playerRadius,
@@ -151,7 +151,7 @@ public class Player : MonoBehaviour, IKitchenObjectParent
         Vector3 moveDirZ = new Vector3(0, 0, moveDir.z).normalized;
         // if moving diagonally, and there is nothing along Z-axis to block it, player can move
 
-        canMove = moveDir.z != 0 && !Physics.CapsuleCast(
+        canMove = (moveDir.z < -.5f || moveDir.z > +.5f) && !Physics.CapsuleCast(
           transform.position,
           transform.position + Vector3.up * playerHeight,
           playerRadius,
